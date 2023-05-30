@@ -16,11 +16,12 @@ export class App extends Component {
       this.state.contacts.findIndex(contact => contact.name === data.name) ===
       -1
     ) {
-      this.state.contacts.push(data);
+      this.setState(prevState => ({
+        contacts: [...prevState.contacts, data],
+      }));
     } else {
       alert(`${data.name} is already in contacts.`);
     }
-    this.setState({ contacts: this.state.contacts });
   };
 
   // функція отримання даних з поля filter
@@ -30,11 +31,9 @@ export class App extends Component {
 
   // функція видалення контакту зі списку
   deleteContact = Id => {
-    const idxContact = this.state.contacts.findIndex(
-      contact => contact.id === Id
-    );
-
-    this.setState({ contact: this.state.contacts.splice(idxContact, 1) });
+    this.setState({
+      contacts: this.state.contacts.filter(contact => contact.id !== Id),
+    });
   };
 
   // зчитування зі сховища
@@ -47,14 +46,9 @@ export class App extends Component {
 
   // запис до сховища
   componentDidUpdate(_, prevState) {
-    if (this.state.contacts === prevState.contacts) {
+    if (this.state.contacts !== prevState.contacts) {
       localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
     }
-    // ***********************************************************
-    // if (this.state.contacts !== prevState.contacts) {
-    //   localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    // }
-    // ***********************************************************
   }
 
   render() {
