@@ -40,7 +40,9 @@ export class App extends Component {
   // зчитування зі сховища
   componentDidMount() {
     const contactsData = JSON.parse(localStorage.getItem('contacts'));
-    this.setState({ contacts: contactsData });
+    if (contactsData) {
+      this.setState({ contacts: contactsData });
+    }
   }
 
   // запис до сховища
